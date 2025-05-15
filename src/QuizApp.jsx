@@ -30,31 +30,6 @@ const defaultQuizData = {
     },
   ],
 };
-
-function parseQuizTxt(text) {
-  const blocks = text.trim().split(/\n\s*\n/);
-  return blocks.map(block => {
-    const lines = block.split("\n");
-    const question = lines.find(l => l.startsWith("q:"))?.slice(2).trim();
-    const optionsLine = lines.find(l => l.startsWith("o:"))?.slice(2).trim();
-    const answer = lines.find(l => l.startsWith("a:"))?.slice(2).trim();
-    const options = optionsLine?.split(",").map(opt => opt.trim()) || [];
-    return { question, options, answer };
-  });
-}
-
-useEffect(() => {
-  fetch("/questions.txt")
-    .then(res => res.text())
-    .then(text => {
-      const parsed = parseQuizTxt(text);
-      if (parsed.length > 0) {
-        setQuizData({ Custom: parsed }); // You can use any topic name here
-        setSelectedTopic("Custom");
-      }
-    })
-    .catch(err => console.error("Failed to load questions.txt:", err));
-}, []);
   
 export default function QuizApp() {
   const [quizData, setQuizData] = useState(() => {
