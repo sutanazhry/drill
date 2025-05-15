@@ -182,23 +182,6 @@ export default function QuizApp() {
     setSelectedTopic(nextTopic);
   };
 
-  const exportAsTxt = () => {
-    const lines = [];
-    for (const topic in quizData) {
-      quizData[topic].forEach((q) => {
-        lines.push(`q: ${q.question}`);
-        lines.push(`o: ${q.options.join(", ")}`);
-        lines.push(`a: ${q.answer}`);
-        lines.push("");
-      });
-    }
-    const blob = new Blob([lines.join("\n")], { type: "text/plain" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "quiz_data.txt";
-    link.click();
-  };
-
   return (
     <div className="p-4 max-w-xl mx-auto mt-10">
       <div className="mb-4 flex gap-2 flex-wrap">
@@ -220,7 +203,6 @@ export default function QuizApp() {
         <Button onClick={() => setShowTopics(!showTopics)}>
           {showTopics ? "Hide Topics" : "Manage Topics"}
         </Button>
-        <Button onClick={exportAsTxt}>Export as .txt</Button>
       </div>
 
       {showTopics && (
