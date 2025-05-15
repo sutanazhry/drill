@@ -51,7 +51,7 @@ export default function QuizApp() {
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [showEditor, setShowEditor] = useState(false);
   const [showExisting, setShowExisting] = useState(false);
-  const [showManageTopics, setShowManageTopics] = useState(false);
+  const [showTopics, setShowTopics] = useState(false);
 
   const [newTopic, setNewTopic] = useState("");
   const [renameTopic, setRenameTopic] = useState("");
@@ -182,23 +182,21 @@ export default function QuizApp() {
     setSelectedTopic(nextTopic);
   };
 
-  const exportToTxt = () => {
-    const topicData = quizData[selectedTopic] || [];
-
-    const formatted = topicData.map(q =>
-      `q: ${q.question}\no: ${q.options.join(", ")}\na: ${q.answer}`
-    ).join("\n\n");
-
-    const blob = new Blob([formatted], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-
+  const exportAsTxt = () => {
+    const lines = [];
+    for (const topic in quizData) {
+      quizData[topic].forEach((q) => {
+        lines.push(`q: ${q.question}`);
+        lines.push(`o: ${q.options.join(", ")}`);
+        lines.push(`a: ${q.answer}`);
+        lines.push("");
+      });
+    }
+    const blob = new Blob([lines.join("\n")], { type: "text/plain" });
     const link = document.createElement("a");
-    link.href = url;
-    link.download = `${selectedTopic}_quiz.txt`;
-    document.body.appendChild(link);
+    link.href = URL.createObjectURL(blob);
+    link.download = "quiz_data.txt";
     link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
   };
 
   return (
@@ -219,16 +217,16 @@ export default function QuizApp() {
         <Button onClick={() => setShowExisting(!showExisting)}>
           {showExisting ? "Hide Questions" : "View Existing Questions"}
         </Button>
-        <Button onClick={() => setShowManageTopics(!showManageTopics)}>
-          {showManageTopics ? "Hide Manage Topics" : "Manage Topics"}
+        <Button onClick={() => setShowTopics(!showTopics)}>
+          {showTopics ? "Hide Topics" : "Manage Topics"}
         </Button>
+        <Button onClick={exportAsTxt}>Export as .txt</Button>
       </div>
 
-      {showManageTopics && (
+      {showTopics && (
         <Card className="rounded-2xl shadow-md mb-6">
           <CardContent className="p-6">
             <h3 className="text-lg font-semibold mb-4">Manage Topics</h3>
-            <Button onClick={exportToTxt}>Export to .txt</Button>
             <div className="flex flex-col gap-2">
               <div className="flex gap-2">
                 <Input
@@ -245,7 +243,7 @@ export default function QuizApp() {
                   onChange={(e) => setRenameTopic(e.target.value)}
                 />
                 <Button onClick={renameCurrentTopic}>Rename</Button>
-              </div>          
+              </div>
               <Button variant="destructive" onClick={deleteCurrentTopic} disabled={Object.keys(quizData).length <= 1}>
                 Delete Current Topic
               </Button>
