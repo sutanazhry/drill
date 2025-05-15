@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent } from "./components/ui/card";
-import { Button } from "./components/ui/button";
-import { Input } from "./components/ui/input";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "./components/ui/dialog";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const defaultQuizData = {
   Math: [
@@ -30,7 +30,7 @@ const defaultQuizData = {
     },
   ],
 };
-  
+
 export default function QuizApp() {
   const [quizData, setQuizData] = useState(() => {
     const stored = localStorage.getItem("quizData");
@@ -51,8 +51,8 @@ export default function QuizApp() {
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [showEditor, setShowEditor] = useState(false);
   const [showExisting, setShowExisting] = useState(false);
-
   const [showManageTopics, setShowManageTopics] = useState(false);
+
   const [newTopic, setNewTopic] = useState("");
   const [renameTopic, setRenameTopic] = useState("");
 
@@ -182,6 +182,25 @@ export default function QuizApp() {
     setSelectedTopic(nextTopic);
   };
 
+  const exportToTxt = () => {
+    const topicData = quizData[selectedTopic] || [];
+
+    const formatted = topicData.map(q =>
+      `q: ${q.question}\no: ${q.options.join(", ")}\na: ${q.answer}`
+    ).join("\n\n");
+
+    const blob = new Blob([formatted], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${selectedTopic}_quiz.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="p-4 max-w-xl mx-auto mt-10">
       <div className="mb-4 flex gap-2 flex-wrap">
@@ -194,14 +213,14 @@ export default function QuizApp() {
             {topic}
           </Button>
         ))}
-        <Button onClick={() => setShowManageTopics(!showManageTopics)}>
-          {showManageTopics ? "Hide Manage Topics" : "Manage Topics"}
-        </Button>
         <Button onClick={() => setShowEditor(!showEditor)}>
           {showEditor ? "Cancel Editing" : "Add New Question"}
         </Button>
         <Button onClick={() => setShowExisting(!showExisting)}>
           {showExisting ? "Hide Questions" : "View Existing Questions"}
+        </Button>
+        <Button onClick={() => setShowManageTopics(!showManageTopics)}>
+          {showManageTopics ? "Hide Manage Topics" : "Manage Topics"}
         </Button>
       </div>
 
@@ -209,32 +228,28 @@ export default function QuizApp() {
         <Card className="rounded-2xl shadow-md mb-6">
           <CardContent className="p-6">
             <h3 className="text-lg font-semibold mb-4">Manage Topics</h3>
-            <Card className="rounded-2xl shadow-md mb-6">
-              <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Manage Topics</h3>
-                <div className="flex flex-col gap-2">
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="New topic name"
-                      value={newTopic}
-                      onChange={(e) => setNewTopic(e.target.value)}
-                    />
-                    <Button onClick={addTopic}>Add Topic</Button>
-                  </div>
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="Rename current topic"
-                      value={renameTopic}
-                      onChange={(e) => setRenameTopic(e.target.value)}
-                    />
-                    <Button onClick={renameCurrentTopic}>Rename</Button>
-                  </div>
-                  <Button variant="destructive" onClick={deleteCurrentTopic} disabled={Object.keys(quizData).length <= 1}>
-                    Delete Current Topic
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-2">
+                <Input
+                  placeholder="New topic name"
+                  value={newTopic}
+                  onChange={(e) => setNewTopic(e.target.value)}
+                />
+                <Button onClick={addTopic}>Add Topic</Button>
+              </div>
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Rename current topic"
+                  value={renameTopic}
+                  onChange={(e) => setRenameTopic(e.target.value)}
+                />
+                <Button onClick={renameCurrentTopic}>Rename</Button>
+              </div>
+              <Button variant="destructive" onClick={deleteCurrentTopic} disabled={Object.keys(quizData).length <= 1}>
+                Delete Current Topic
+              </Button>
+              <Button onClick={exportToTxt}>Export to .txt</Button>
+            </div>
           </CardContent>
         </Card>
       )}
