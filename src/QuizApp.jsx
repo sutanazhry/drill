@@ -52,6 +52,7 @@ export default function QuizApp() {
   const [showEditor, setShowEditor] = useState(false);
   const [showExisting, setShowExisting] = useState(false);
 
+  const [showManageTopics, setShowManageTopics] = useState(false);
   const [newTopic, setNewTopic] = useState("");
   const [renameTopic, setRenameTopic] = useState("");
 
@@ -193,6 +194,9 @@ export default function QuizApp() {
             {topic}
           </Button>
         ))}
+        <Button onClick={() => setShowManageTopics(!showManageTopics)}>
+          {showManageTopics ? "Hide Manage Topics" : "Manage Topics"}
+        </Button>
         <Button onClick={() => setShowEditor(!showEditor)}>
           {showEditor ? "Cancel Editing" : "Add New Question"}
         </Button>
@@ -201,32 +205,39 @@ export default function QuizApp() {
         </Button>
       </div>
 
-      <Card className="rounded-2xl shadow-md mb-6">
-        <CardContent className="p-6">
-          <h3 className="text-lg font-semibold mb-4">Manage Topics</h3>
-          <div className="flex flex-col gap-2">
-            <div className="flex gap-2">
-              <Input
-                placeholder="New topic name"
-                value={newTopic}
-                onChange={(e) => setNewTopic(e.target.value)}
-              />
-              <Button onClick={addTopic}>Add Topic</Button>
-            </div>
-            <div className="flex gap-2">
-              <Input
-                placeholder="Rename current topic"
-                value={renameTopic}
-                onChange={(e) => setRenameTopic(e.target.value)}
-              />
-              <Button onClick={renameCurrentTopic}>Rename</Button>
-            </div>
-            <Button variant="destructive" onClick={deleteCurrentTopic} disabled={Object.keys(quizData).length <= 1}>
-              Delete Current Topic
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      {showManageTopics && (
+        <Card className="rounded-2xl shadow-md mb-6">
+          <CardContent className="p-6">
+            <h3 className="text-lg font-semibold mb-4">Manage Topics</h3>
+            <Card className="rounded-2xl shadow-md mb-6">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold mb-4">Manage Topics</h3>
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="New topic name"
+                      value={newTopic}
+                      onChange={(e) => setNewTopic(e.target.value)}
+                    />
+                    <Button onClick={addTopic}>Add Topic</Button>
+                  </div>
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="Rename current topic"
+                      value={renameTopic}
+                      onChange={(e) => setRenameTopic(e.target.value)}
+                    />
+                    <Button onClick={renameCurrentTopic}>Rename</Button>
+                  </div>
+                  <Button variant="destructive" onClick={deleteCurrentTopic} disabled={Object.keys(quizData).length <= 1}>
+                    Delete Current Topic
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </CardContent>
+        </Card>
+      )}
 
       {(questions.length === 0 && !showEditor && !showExisting && !showScore) && (
         <Card className="rounded-2xl shadow-md mb-6">
