@@ -228,6 +228,7 @@ export default function QuizApp() {
         <Card className="rounded-2xl shadow-md mb-6">
           <CardContent className="p-6">
             <h3 className="text-lg font-semibold mb-4">Manage Topics</h3>
+            <Button onClick={exportToTxt}>Export to .txt</Button>
             <div className="flex flex-col gap-2">
               <div className="flex gap-2">
                 <Input
@@ -244,11 +245,10 @@ export default function QuizApp() {
                   onChange={(e) => setRenameTopic(e.target.value)}
                 />
                 <Button onClick={renameCurrentTopic}>Rename</Button>
-              </div>
+              </div>          
               <Button variant="destructive" onClick={deleteCurrentTopic} disabled={Object.keys(quizData).length <= 1}>
                 Delete Current Topic
               </Button>
-              <Button onClick={exportToTxt}>Export to .txt</Button>
             </div>
           </CardContent>
         </Card>
