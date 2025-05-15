@@ -1,0 +1,7 @@
+q: What is 4 + 4?
+o: 10, 8, 54, 19
+a: 8
+
+q: What is the capital of Japan?
+o: Seoul, Tokyo, Beijing, Bangkok
+a: Tokyo
