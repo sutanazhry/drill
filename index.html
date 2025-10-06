@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ambisius Belajar - IELTS Prep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <span class="brand-name">Ambisius Belajar</span>
+      </div>
+      <nav class="nav" aria-label="Main">
+        <button class="nav-link" data-route="#dashboard">Dashboard</button>
+        <button class="nav-link" data-route="#resources">Resources</button>
+        <button class="nav-link" data-route="#quizzes">Quizzes</button>
+        <button class="nav-link" data-route="#mock">Mock Tests</button>
+        <button class="nav-link" data-route="#subscription">Subscription</button>
+        <button class="nav-link" data-route="#profile">Profile</button>
+      </nav>
+      <div class="auth-cta">
+        <button id="logoutBtn" class="btn btn-secondary small" title="Sign out">Logout</button>
+      </div>
+    </header>
+
+    <main id="app" class="container">
+      <!-- Dashboard View -->
+      <section id="view-dashboard" class="view view-active" role="region" aria-labelledby="dashboard-title">
+        <h2 id="dashboard-title" class="view-title">Dashboard</h2>
+        <div class="grid dashboard-grid">
+          <div class="card">
+            <h3>Overview</h3>
+            <div class="overview">
+              <div class="overview-row">
+                <span>Target Band</span>
+                <strong id="overview-target">-</strong>
+              </div>
+              <div class="overview-row">
+                <span>Latest Average Band</span>
+                <strong id="overview-avg-band">-</strong>
+              </div>
+              <div class="overview-row">
+                <span>Completion</span>
+                <div class="progress">
+                  <div id="overview-progress" class="progress-bar" style="width:0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Performance Trends</h3>
+            <div class="charts">
+              <div class="chart-item"><h4>Listening</h4><div id="chart-listening" class="chart"></div></div>
+              <div class="chart-item"><h4>Reading</h4><div id="chart-reading" class="chart"></div></div>
+              <div class="chart-item"><h4>Writing</h4><div id="chart-writing" class="chart"></div></div>
+              <div class="chart-item"><h4>Speaking</h4><div id="chart-speaking" class="chart"></div></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Recent Activity</h3>
+            <ul id="recent-activity" class="list"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Resources View -->
+      <section id="view-resources" class="view" role="region" aria-labelledby="resources-title">
+        <h2 id="resources-title" class="view-title">Learning Resources</h2>
+        <div class="grid resources-grid" id="resources-list">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- Quizzes View -->
+      <section id="view-quizzes" class="view" role="region" aria-labelledby="quizzes-title">
+        <h2 id="quizzes-title" class="view-title">Sectional Quizzes</h2>
+        <div class="grid quizzes-grid" id="quizzes-list">
+          <!-- Populated by JS -->
+        </div>
+        <div class="card" id="quiz-runner" hidden>
+          <div class="quiz-header">
+            <h3 id="quiz-title">Quiz</h3>
+            <div class="quiz-meta">
+              <span id="quiz-timer">--:--</span>
+            </div>
+          </div>
+          <div id="quiz-questions" class="quiz-questions"></div>
+          <div class="quiz-actions">
+            <button id="submit-quiz" class="btn btn-primary">Submit</button>
+            <button id="cancel-quiz" class="btn btn-secondary">Cancel</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mock Tests View -->
+      <section id="view-mock" class="view" role="region" aria-labelledby="mock-title">
+        <h2 id="mock-title" class="view-title">Full Mock Tests</h2>
+        <div id="stages-list" class="grid stages-grid">
+          <!-- Populated by JS -->
+        </div>
+        <div id="mock-runner" class="card" hidden>
+          <div class="quiz-header">
+            <h3 id="mock-title-run">Mock Test</h3>
+            <div class="quiz-meta">
+              <span id="mock-timer">--:--</span>
+            </div>
+          </div>
+          <div id="mock-content" class="quiz-questions"></div>
+          <div class="quiz-actions">
+            <button id="submit-mock" class="btn btn-primary">Submit Mock Test</button>
+            <button id="cancel-mock" class="btn btn-secondary">Cancel</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Subscription View -->
+      <section id="view-subscription" class="view" role="region" aria-labelledby="subscription-title">
+        <h2 id="subscription-title" class="view-title">Subscription & Payment (QRIS)</h2>
+        <div class="grid stages-grid" id="subscription-stages">
+          <!-- Populated by JS -->
+        </div>
+        <div class="hint">Payments are simulated. Scan the QR to visualize, then click "I have paid" to complete the simulation. For real gateway integration, see the inline notes in code.</div>
+      </section>
+
+      <!-- Profile View -->
+      <section id="view-profile" class="view" role="region" aria-labelledby="profile-title">
+        <h2 id="profile-title" class="view-title">Profile</h2>
+        <div class="grid profile-grid">
+          <div class="card">
+            <h3>Account</h3>
+            <div class="form">
+              <label>Email
+                <input id="profile-email" type="email" disabled />
+              </label>
+            </div>
+            <button id="delete-account" class="btn btn-danger">Delete Account</button>
+          </div>
+          <div class="card">
+            <h3>Preferences</h3>
+            <div class="form">
+              <label>Target Band
+                <input id="profile-target" type="number" min="0" max="9" step="0.5" />
+              </label>
+              <label>Test Type
+                <select id="profile-test-type">
+                  <option value="Academic">Academic</option>
+                  <option value="General">General</option>
+                </select>
+              </label>
+            </div>
+            <button id="save-profile" class="btn btn-primary">Save Profile</button>
+          </div>
+          <div class="card">
+            <h3>Subscription</h3>
+            <div id="profile-subscription" class="list"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="auth-title" hidden>
+      <div class="modal-content">
+        <h3 id="auth-title">Welcome to Ambisius Belajar</h3>
+        <div class="tabs">
+          <button class="tab active" data-tab="login">Login</button>
+          <button class="tab" data-tab="register">Register</button>
+        </div>
+        <div class="tab-panels">
+          <div id="tab-login" class="tab-panel active">
+            <label>Email
+              <input id="login-email" type="email" placeholder="you@example.com" />
+            </label>
+            <label>Password
+              <input id="login-password" type="password" placeholder="••••••••" />
+            </label>
+            <button id="login-submit" class="btn btn-primary full">Login</button>
+          </div>
+          <div id="tab-register" class="tab-panel">
+            <label>Email
+              <input id="register-email" type="email" placeholder="you@example.com" />
+            </label>
+            <label>Password
+              <input id="register-password" type="password" placeholder="Create a password" />
+            </label>
+            <button id="register-submit" class="btn btn-primary full">Create Account</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="payment-title" hidden>
+      <div class="modal-content">
+        <h3 id="payment-title">Pay with QRIS</h3>
+        <div id="payment-body" class="payment-body">
+          <!-- Filled by JS -->
+        </div>
+        <div class="modal-actions">
+          <button id="payment-paid" class="btn btn-primary">I have paid</button>
+          <button id="payment-cancel" class="btn btn-secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
